@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Promotic",
+    "slug": "promotic",
+    "privacy": "public",
+    "sdkVersion": "32.0.0",
+    "platforms": ["ios", "android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F23C44"
+    },
+    "primaryColor": "#F23C44",
+    "facebookAppId": "812713195788180",
+    "facebookDisplayName": "PROMOTIC - Sorteio Digital",
+    "facebookScheme": "fb812713195788180",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
