@@ -53,6 +53,8 @@ export default function user(state = INITIAL_STATE, action) {
     case Types.USER_LOGIN_SUCCESS:
     case Types.FACEBOOK_LOGIN_SUCCESS:
     case Types.USER_UPDATE_DATA_SUCCESS:
+      if (payload.id === null) return INITIAL_STATE;
+
       return { ...state, ...payload, isAuthenticated: true };
 
     case Types.USER_DELETE_SUCCESS:

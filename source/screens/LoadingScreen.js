@@ -37,7 +37,7 @@ function LoadingScreen(props) {
   function onFinish() {
     const { user, navigation } = props;
 
-    user.isAuthenticated
+    user.isAuthenticated && user.id
       ? navigation.navigate("Promotions", { name: user.nome })
       : navigation.navigate("Auth");
   }
