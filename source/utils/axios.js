@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://agile-beyond-92897.herokuapp.com/api/",
+  baseURL: "https://promotic.com.br/api/",
   headers: {
     "Content-Type": "application/json"
   },

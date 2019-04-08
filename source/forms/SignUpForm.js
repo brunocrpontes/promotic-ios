@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class SignUpForm extends React.Component {
+class SignUpForm extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -53,11 +53,13 @@ class SignUpForm extends React.Component {
     this.onBlurEmailText = this.onBlurEmailText.bind(this);
     this.onSubmitEmailText = this.onSubmitEmailText.bind(this);
     this.onChangePasswordText = this.onChangePasswordText.bind(this);
+    this.onBlurPasswordText = this.onBlurPasswordText.bind(this);
     this.onSubmitPasswordText = this.onSubmitPasswordText.bind(this);
+    this.onBlurConfirmText = this.onBlurConfirmText.bind(this);
     this.onChangeConfirmText = this.onChangeConfirmText.bind(this);
   }
 
-  onChangeNameText(nome: string) {
+  onChangeNameText(nome) {
     this.setState({
       nome: {
         value: nome
@@ -93,7 +95,7 @@ class SignUpForm extends React.Component {
     this.cpf.getElement().focus();
   }
 
-  onChangeCpfText(cpf: string) {
+  onChangeCpfText(cpf) {
     this.setState({
       cpf: {
         value: cpf
@@ -104,14 +106,12 @@ class SignUpForm extends React.Component {
   onBlurCpfText() {
     const { cpf } = this.state;
 
-    if (!cpf.value || !MaskService.isValid("cpf", cpf.value)) {
+    if (cpf.value && !MaskService.isValid("cpf", cpf.value)) {
       this.setState({
         cpf: {
           ...cpf,
           hasError: true,
-          errorMessage: !cpf.value
-            ? "Campo Obrigatório"
-            : "Insira um CPF válido"
+          errorMessage: "Insira um CPF válido"
         }
       });
 
@@ -126,7 +126,7 @@ class SignUpForm extends React.Component {
     this.telefone.getElement().focus();
   }
 
-  onChangePhoneText(telefone: string) {
+  onChangePhoneText(telefone) {
     this.setState({
       telefone: {
         value: telefone
@@ -137,14 +137,12 @@ class SignUpForm extends React.Component {
   onBlurPhoneText() {
     const { telefone } = this.state;
 
-    if (!telefone.value || !MaskService.isValid("cel-phone", telefone.value)) {
+    if (telefone.value && !MaskService.isValid("cel-phone", telefone.value)) {
       this.setState({
         telefone: {
           ...telefone,
           hasError: true,
-          errorMessage: !telefone.value
-            ? "Campo Obrigatório"
-            : "Insira um telefone válido"
+          errorMessage: "Insira um telefone válido"
         }
       });
 
@@ -161,7 +159,7 @@ class SignUpForm extends React.Component {
     this.email.focus();
   }
 
-  onChangeEmailText(email: string) {
+  onChangeEmailText(email) {
     this.setState({
       email: {
         value: email
@@ -219,7 +217,7 @@ class SignUpForm extends React.Component {
       });
   }
 
-  onChangePasswordText(senha: string) {
+  onChangePasswordText(senha) {
     this.setState({
       senha: {
         value: senha
@@ -232,7 +230,7 @@ class SignUpForm extends React.Component {
   }
 
   onBlurConfirmText() {
-    const { confirm, password } = this.state;
+    const { confirm, senha } = this.state;
 
     if (!confirm.value || senha.value !== confirm.value) {
       this.setState({
@@ -254,7 +252,7 @@ class SignUpForm extends React.Component {
       });
   }
 
-  onChangeConfirmText(confirm: string) {
+  onChangeConfirmText(confirm) {
     this.setState({
       confirm: {
         value: confirm
@@ -262,28 +260,32 @@ class SignUpForm extends React.Component {
     });
   }
 
-  onSubmitForm() {
+  async onSubmitForm() {
     const { signUp, addError } = this.props;
 
     const keys = Object.keys(this.state);
 
-    const errors =
-      _(keys).reduce((acc, key) => {
-        const isEmpty = !Boolean(this.state[key].value);
+    const nullableKeys = ["cpf", "telefone"];
 
-        if (isEmpty)
-          return {
-            ...acc,
-            [key]: {
-              hasError: true,
-              errorMessage: "Campo Obrigatório"
-            }
-          };
-      }, {}) &&
-      this.setState(prevState => ({
-        ...prevState,
-        ...errors
-      }));
+    //receive just array keys where are needed in form
+    const neededKeys = _.difference(keys, nullableKeys);
+    const errors = _(neededKeys).reduce((acc, key) => {
+      const isEmpty = !Boolean(this.state[key].value);
+
+      if (isEmpty)
+        return {
+          ...acc,
+          [key]: {
+            hasError: true,
+            errorMessage: "Campo Obrigatório"
+          }
+        };
+    }, {});
+
+    await this.setState(prevState => ({
+      ...prevState,
+      ...errors
+    }));
 
     if (_(keys).some(key => _.get(this.state, `${key}.hasError`, false))) {
       addError(
@@ -303,16 +305,9 @@ class SignUpForm extends React.Component {
   }
 
   render() {
-    const {
-      nome,
-      cpf,
-      telefone,
-      email,
-      senha,
-      confirm,
-      isLoading,
-      hasInternet
-    } = this.state;
+    const { nome, cpf, telefone, email, senha, confirm } = this.state;
+
+    const { isLoading, hasInternet } = this.props;
 
     return (
       <View>
@@ -328,7 +323,7 @@ class SignUpForm extends React.Component {
           ref={input => (this.nome = input)}
           onSubmitEditing={this.onSubmitNameText}
           onChangeText={this.onChangeNameText}
-          placeholder="Nome Sobrenome"
+          placeholder="João da Silva"
           autoCapitalize="words"
         />
         <HelperText visible={nome.hasError} type="error">
@@ -417,7 +412,7 @@ class SignUpForm extends React.Component {
           mode="outlined"
           secureTextEntry
           value={confirm.value}
-          error={senha.hasError}
+          error={confirm.hasError}
           keyboardType="default"
           style={styles.textInput}
           onSubmitEditing={this.onSubmitForm}
@@ -429,7 +424,7 @@ class SignUpForm extends React.Component {
           <Text>{confirm.errorMessage}</Text>
         </HelperText>
         <Button
-          disabled={hasInternet}
+          disabled={!hasInternet}
           loading={isLoading}
           style={styles.loginButton}
           mode="contained"
@@ -441,7 +436,7 @@ class SignUpForm extends React.Component {
     );
   }
 }
-const loadingState = createLoadingSelector(UserPrefix.USER_SIGNUP);
+const loadingState = createLoadingSelector([UserPrefix.USER_SIGNUP]);
 
 const mapStateToProps = state => ({
   isLoading: loadingState(state),

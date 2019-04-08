@@ -8,9 +8,7 @@ export default function GoogleButton(props) {
     return <Icon size={size} color={color} name="google" />;
   }
 
-  function onPress() {
-    console.log("GOOGLE");
-  }
+  function onPress() {}
 
   return (
     <Button

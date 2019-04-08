@@ -76,49 +76,6 @@ export function logoutSuccess() {
   };
 }
 
-export function logoutFailure(message) {
-  return {
-    type: Types.USER_LOGOUT_FAILURE,
-    payload: message
-  };
-}
-
-export function removeLogouError() {
-  return {
-    type: Types.USER_LOGOUT_REMOVE_ERROR
-  };
-}
-
-/**
- *
- * USER DATA ACTIONS
- */
-export function requestUserData() {
-  return {
-    type: Types.USER_DATA_REQUEST
-  };
-}
-
-export function requestUserDataSuccess(user) {
-  return {
-    type: Types.USER_DATA_SUCCESS,
-    payload: user
-  };
-}
-
-export function requestUserDataFailure(message) {
-  return {
-    type: Types.USER_DATA_FAILURE,
-    payload: message
-  };
-}
-
-export function removeUserDataError() {
-  return {
-    type: Types.USER_DATA_REMOVE_ERROR
-  };
-}
-
 /**
  *
  * UPDATE USER DATA ACTIONS
@@ -137,15 +94,30 @@ export function requestUpdateUserDataSuccess(user) {
   };
 }
 
-export function requestUpdateUserDataFailure(message) {
+export function requestDeleteAccount() {
   return {
-    type: Types.USER_UPDATE_DATA_FAILURE,
-    payload: message
+    type: Types.USER_DELETE_REQUEST
   };
 }
 
-export function removeUpdateDataError() {
+export function requestDeleteAccountSuccess() {
   return {
-    type: Types.USER_UPDATE_DATA_REMOVE_ERROR
+    type: Types.USER_DELETE_SUCCESS
+  };
+}
+
+/**
+ * SOCIAL LOGINS
+ */
+export function facebookLogin() {
+  return {
+    type: Types.FACEBOOK_LOGIN_REQUEST
+  };
+}
+
+export function facebookLoginSuccess(user) {
+  return {
+    type: Types.FACEBOOK_LOGIN_SUCCESS,
+    payload: user
   };
 }

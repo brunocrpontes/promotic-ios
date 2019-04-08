@@ -16,10 +16,11 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-masked-text": "^1.11.1",
-    "react-native-paper": "^2.14.0",
+    "react-native-paper": "^2.15.1",
     "react-navigation": "^3.5.1",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
+    "redux-persist": "^5.10.0",
     "redux-saga": "^1.0.2"
   },
   "devDependencies": {

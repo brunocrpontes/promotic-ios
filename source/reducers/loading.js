@@ -15,6 +15,12 @@ export default function loading(state = {}, action) {
 
   const [, requestName, requestState] = matches;
 
+  console.log(
+    `REQUEST NAME: ${requestName}`,
+    `REQUEST STATE: ${requestState}`,
+    state
+  );
+
   return {
     ...state,
 

@@ -113,29 +113,29 @@ class SignInForm extends React.Component {
     NavigationService.navigate("SignUp");
   }
 
-  onSubmitLogin() {
+  async onSubmitLogin() {
     const { login } = this.props;
     const { email, senha } = this.state;
 
     const keys = Object.keys(this.state);
 
-    const errors =
-      _(keys).reduce((acc, key) => {
-        const isEmpty = !Boolean(this.state[key].value);
+    const errors = _(keys).reduce((acc, key) => {
+      const isEmpty = !Boolean(this.state[key].value);
 
-        if (isEmpty)
-          return {
-            ...acc,
-            [key]: {
-              hasError: true,
-              errorMessage: "Campo Obrigatório"
-            }
-          };
-      }, {}) &&
-      this.setState(prevState => ({
-        ...prevState,
-        ...errors
-      }));
+      if (isEmpty)
+        return {
+          ...acc,
+          [key]: {
+            hasError: true,
+            errorMessage: "Campo Obrigatório"
+          }
+        };
+    }, {});
+
+    await this.setState(prevState => ({
+      ...prevState,
+      ...errors
+    }));
 
     if (_(keys).some(key => _.get(this.state, `${key}.hasError`, false)))
       return;
@@ -158,6 +158,7 @@ class SignInForm extends React.Component {
           label="E-mail"
           mode="outlined"
           returnKeyType="next"
+          autoCapitalize="none"
           keyboardType="email-address"
           placeholder={"email@dominio.com"}
           onChangeText={this.onChangeEmailText}
@@ -193,7 +194,7 @@ class SignInForm extends React.Component {
             <Text>Cadastrar-se</Text>
           </Button>
           <Button
-            disabled={hasInternet}
+            disabled={!hasInternet}
             loading={isLoading}
             style={styles.loginButton}
             mode="contained"
@@ -207,7 +208,10 @@ class SignInForm extends React.Component {
   }
 }
 
-const loadingState = createLoadingSelector([UserPrefix.USER_LOGIN]);
+const loadingState = createLoadingSelector([
+  UserPrefix.USER_LOGIN,
+  UserPrefix.FACEBOOK_LOGIN
+]);
 
 const mapStateToProps = state => ({
   isLoading: loadingState(state),

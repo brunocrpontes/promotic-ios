@@ -1,4 +1,4 @@
-import { NavigationAction, NavigationActions } from "react-navigation";
+import { NavigationActions } from "react-navigation";
 
 let navigator;
 
@@ -10,7 +10,12 @@ function navigate(routeName, params) {
   navigator.dispatch(NavigationActions.navigate({ routeName, params }));
 }
 
+function pop() {
+  navigator.dispatch(NavigationActions.back());
+}
+
 export default {
+  pop,
   navigate,
   setNavigator
 };

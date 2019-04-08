@@ -1,26 +1,27 @@
 import React from "react";
-import theme from "../theme";
-import { HomeScreen, ProfileScreen } from "../screens";
 import { createBottomTabNavigator } from "react-navigation";
-import Icon from "@expo/vector-icons/MaterialIcons";
+import theme from "../theme";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import ProfileNavigator from "./ProfileNavigator";
+import PromotionsNavigator from "./PromotionsNavigator";
 
 export default createBottomTabNavigator(
   {
-    Home: {
-      screen: HomeScreen,
+    PromotionsTab: {
+      screen: PromotionsNavigator,
       navigationOptions: {
-        title: "Tickets",
+        title: "Promoção",
         tabBarIcon: ({ focused, tintColor }) => (
-          <Icon color={tintColor} name={"receipt"} size={24} />
+          <MaterialIcons color={tintColor} name={"receipt"} size={24} />
         )
       }
     },
-    Profile: {
-      screen: ProfileScreen,
+    ProfileTab: {
+      screen: ProfileNavigator,
       navigationOptions: {
         title: "Perfil",
         tabBarIcon: ({ focused, tintColor }) => (
-          <Icon color={tintColor} name={"person"} size={24} />
+          <MaterialIcons color={tintColor} name={"person"} size={24} />
         )
       }
     }

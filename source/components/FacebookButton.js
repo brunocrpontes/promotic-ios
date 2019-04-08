@@ -3,6 +3,7 @@ import React from "react";
 import { Button, Text } from "react-native-paper";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { connect } from "react-redux";
+import { facebookLogin } from "../actions/user";
 
 function FacebookButton(props) {
   const { facebookLogin } = props;
@@ -24,10 +25,8 @@ function FacebookButton(props) {
   );
 }
 
-const mapDispatchToProps = (dispatch, state) => {
-  return {
-    facebookLogin: () => dispatch({ type: "FACEBOOK_LOGIN" })
-  };
+const mapDispatchToProps = {
+  facebookLogin
 };
 
 export default connect(

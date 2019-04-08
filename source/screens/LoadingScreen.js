@@ -1,7 +1,9 @@
 // @flow
 import React from "react";
-import { AppLoading } from "expo";
+import { AppLoading, Asset } from "expo";
+import { Image } from "react-native";
 import { loadAsync } from "expo-font";
+import { connect } from "react-redux";
 
 // fonts
 import RobotoThin from "../../assets/fonts/Roboto-Thin.ttf";
@@ -10,12 +12,19 @@ import Roboto from "../../assets/fonts/Roboto-Regular.ttf";
 import RobotoMedium from "../../assets/fonts/Roboto-Medium.ttf";
 import Brand from "../../assets/fonts/brand.ttf";
 
-// Images
+// Images and Assets
+import promotionLogo from "../../assets/images/promocao_banner.png";
 
-export default function LoadingScreen(props) {
-  //TODO: load cached data
+function LoadingScreen(props) {
+  function loadAssets(images) {
+    return images.map(image => {
+      if (typeof image === "string") return Image.prefetch(image);
 
-  function loadFonts(): Promise<void> {
+      return Asset.fromModule(image).downloadAsync();
+    });
+  }
+
+  function loadFonts() {
     return loadAsync({
       Brand,
       "Roboto Thin": RobotoThin,
@@ -25,23 +34,23 @@ export default function LoadingScreen(props) {
     });
   }
 
-  function onError(error) {
-    console.error(error);
-  }
-
   function onFinish() {
-    props.navigation.navigate("SignIn");
+    const { user, navigation } = props;
+
+    user.isAuthenticated
+      ? navigation.navigate("Promotions", { name: user.nome })
+      : navigation.navigate("Auth");
   }
 
-  function onStartAsync(): Promisse<void> {
-    return Promise.all([loadFonts() /* loadImages */]);
+  function onStartAsync() {
+    return Promise.all([loadFonts(), ...loadAssets([promotionLogo])]);
   }
 
-  return (
-    <AppLoading
-      onFinish={onFinish}
-      onError={onError}
-      startAsync={onStartAsync}
-    />
-  );
+  return <AppLoading onFinish={onFinish} startAsync={onStartAsync} />;
 }
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(LoadingScreen);

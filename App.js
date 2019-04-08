@@ -1,6 +1,6 @@
 // @flow
 import React from "react";
-import store from "./source/store";
+import { store, persistor } from "./source/store";
 import theme from "./source/theme";
 import Routes from "./source/routes";
 import { Provider } from "react-redux";
@@ -9,8 +9,9 @@ import { useScreens } from "react-native-screens";
 import { Provider as PaperProvider } from "react-native-paper";
 import NavigationService from "./source/routes/NavigationService";
 import { updateConnectionState } from "./source/actions/connection";
+import { PersistGate } from "redux-persist/integration/react";
 
-useScreens();
+useScreens(false);
 
 export default class App extends React.Component {
   constructor(props) {
@@ -37,12 +38,14 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <PaperProvider theme={theme}>
-          <StatusBar animated barStyle="light-content" />
-          <Routes
-            ref={navigatorRef => NavigationService.setNavigator(navigatorRef)}
-          />
-        </PaperProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <PaperProvider theme={theme}>
+            <StatusBar animated barStyle="light-content" />
+            <Routes
+              ref={navigatorRef => NavigationService.setNavigator(navigatorRef)}
+            />
+          </PaperProvider>
+        </PersistGate>
       </Provider>
     );
   }

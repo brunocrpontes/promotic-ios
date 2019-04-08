@@ -62,7 +62,13 @@ const styles = StyleSheet.create({
 });
 
 function SignInScreen(props) {
-  const { isLoading, userError, connectionError, hasInternet } = props;
+  const {
+    isLoading,
+    userError,
+    connectionError,
+    hasInternet,
+    facebookError
+  } = props;
 
   const disabled = isLoading && !hasInternet;
 
@@ -94,16 +100,22 @@ function SignInScreen(props) {
             compact
           >
             <Text>Esqueceu a senha?</Text>
-          </Button> */}
+          </Button>
           <View style={styles.optionsDividerContainer}>
             <View style={styles.optionsDivider} />
             <Text style={styles.optionsDividerText}>OU</Text>
             <View style={styles.optionsDivider} />
-          </View>
+          </View>*/}
           <FacebookButton disabled={disabled} style={styles.centeredButton} />
-          <GoogleButton disabled={disabled} style={styles.centeredButton} />
+          {/* <GoogleButton disabled={disabled} style={styles.centeredButton} /> */}
         </View>
       </KeyboardAwareScrollView>
+      {Boolean(facebookError) && (
+        <ErrorNotification
+          message={facebookError}
+          prefixError={UserPrefix.FACEBOOK_LOGIN}
+        />
+      )}
       {Boolean(userError) && (
         <ErrorNotification
           message={userError}
@@ -112,7 +124,7 @@ function SignInScreen(props) {
       )}
       {Boolean(connectionError) && (
         <ErrorNotification
-          message={connectionErrorSelector}
+          message={connectionError}
           prefixError={ConnectionPrefix.CONNECTION_STATE}
         />
       )}
@@ -122,15 +134,21 @@ function SignInScreen(props) {
 
 const userErrorSelector = createErrorSelector([UserPrefix.USER_LOGIN]);
 
+const facebookErrorSelector = createErrorSelector([UserPrefix.FACEBOOK_LOGIN]);
+
 const connectionErrorSelector = createErrorSelector([
   ConnectionPrefix.CONNECTION_STATE
 ]);
 
-const loadingSelector = createLoadingSelector([UserPrefix.USER_LOGIN]);
+const loadingSelector = createLoadingSelector([
+  UserPrefix.USER_LOGIN,
+  UserPrefix.FACEBOOK_LOGIN
+]);
 
 const mapStateToProps = state => ({
   isLoading: loadingSelector(state),
   userError: userErrorSelector(state),
+  facebookError: facebookErrorSelector(state),
   connectionError: connectionErrorSelector(state),
   hasInternet: state.connection
 });

@@ -1,36 +1,37 @@
+import { TicketsScreen } from "../screens";
 import { createStackNavigator } from "react-navigation";
 import HomeNavigator from "./HomeNavigator";
-import PromotionNavigator from "./PromotionNavigator";
+import NewTicketNavigator from "./NewTicketNavigator";
 import theme from "../theme";
-import { NewTicketScreen } from "../screens";
 
 export default createStackNavigator(
   {
-    Main: {
+    Home: {
       screen: HomeNavigator,
-      navigationOptions: ({ navigation }) => {
-        const name = navigation.getParam("name", "");
-        const [firstName] = name.split(" ");
-
-        return {
-          title: `Olá, ${firstName || name}`
-        };
-      }
-    },
-    NewTicket: {
-      screen: NewTicketScreen,
       navigationOptions: {
         header: null
+      }
+    },
+    NewTicketStack: {
+      screen: NewTicketNavigator,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: "white"
+      }
+    },
+    Tickets: {
+      screen: TicketsScreen,
+      navigationOptions: {
+        title: "Meus Tickets",
+        headerStyle: {
+          backgroundColor: theme.colors.primary
+        },
+        headerTintColor: "white"
       }
     }
   },
   {
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: theme.colors.primary
-      },
-      headerTintColor: "white"
-    },
-    mode: "modal",
+    headerBackTitleVisible: false,
+    initialRouteName: "Home"
   }
 );

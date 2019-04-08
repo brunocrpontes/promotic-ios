@@ -1,8 +1,8 @@
 import { createStackNavigator } from "react-navigation";
-import { SignInScreen, SignUpScreen, ForgotPasswordScreen } from "../screens";
+import { SignInScreen, SignUpScreen } from "../screens";
 import theme from "../theme";
 
-const SignInAndUp = createStackNavigator(
+export default createStackNavigator(
   {
     SignIn: {
       screen: SignInScreen,
@@ -28,26 +28,5 @@ const SignInAndUp = createStackNavigator(
       headerTintColor: "white"
     },
     headerBackTitleVisible: false
-  }
-);
-
-export default createStackNavigator(
-  {
-    Sign: {
-      screen: SignInAndUp,
-      navigationOptions: {
-        header: null
-      }
-    },
-    ForgotPassword: ForgotPasswordScreen
-  },
-  {
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: theme.colors.primary
-      },
-      headerTintColor: "white"
-    },
-    mode: "modal"
   }
 );
