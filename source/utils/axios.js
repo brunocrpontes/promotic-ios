@@ -9,6 +9,7 @@ export default axios.create({
   transformResponse: [
     data => {
       console.log(data);
+
       return data;
     }
   ]

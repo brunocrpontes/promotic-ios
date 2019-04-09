@@ -106,12 +106,14 @@ class SignUpForm extends React.PureComponent {
   onBlurCpfText() {
     const { cpf } = this.state;
 
-    if (cpf.value && !MaskService.isValid("cpf", cpf.value)) {
+    if (!cpf.value && !MaskService.isValid("cpf", cpf.value)) {
       this.setState({
         cpf: {
           ...cpf,
           hasError: true,
-          errorMessage: "Insira um CPF válido"
+          errorMessage: !cpf.value
+            ? "Campo Obrigatório"
+            : "Insira um CPF válido"
         }
       });
 
@@ -137,12 +139,14 @@ class SignUpForm extends React.PureComponent {
   onBlurPhoneText() {
     const { telefone } = this.state;
 
-    if (telefone.value && !MaskService.isValid("cel-phone", telefone.value)) {
+    if (!telefone.value && !MaskService.isValid("cel-phone", telefone.value)) {
       this.setState({
         telefone: {
           ...telefone,
           hasError: true,
-          errorMessage: "Insira um telefone válido"
+          errorMessage: !telefone.value
+            ? "Campo Obrigatório"
+            : "Insira um telefone válido"
         }
       });
 
@@ -265,11 +269,7 @@ class SignUpForm extends React.PureComponent {
 
     const keys = Object.keys(this.state);
 
-    const nullableKeys = ["cpf", "telefone"];
-
-    //receive just array keys where are needed in form
-    const neededKeys = _.difference(keys, nullableKeys);
-    const errors = _(neededKeys).reduce((acc, key) => {
+    const errors = _(keys).reduce((acc, key) => {
       const isEmpty = !Boolean(this.state[key].value);
 
       if (isEmpty)
@@ -280,6 +280,8 @@ class SignUpForm extends React.PureComponent {
             errorMessage: "Campo Obrigatório"
           }
         };
+
+      return acc;
     }, {});
 
     await this.setState(prevState => ({

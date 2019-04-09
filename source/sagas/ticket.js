@@ -12,6 +12,7 @@ import { useTicketSuccess } from "../actions/ticket";
 import { add } from "../actions/error";
 import { requestTicketListSuccess } from "../actions/ticket";
 import axios from "../utils/axios";
+import NavigationService from "../routes/NavigationService";
 
 export default function* rootSagaTicket() {
   yield all([tickets(), useTicket()]);
@@ -43,7 +44,7 @@ function* useTicket() {
     const {
       payload: { id, code }
     } = yield take(Types.USE_TICKET_REQUEST);
-    yield call(requestUseTicket, { id, code });
+    yield fork(requestUseTicket, { id, code });
 
     yield take([Types.USE_TICKET_SUCCESS, Types.USE_TICKET_FAILURE]);
   }
@@ -63,7 +64,10 @@ function* requestUseTicket({ id, code }) {
       return;
     }
 
-    yield put(useTicketSuccess());
+    yield all([
+      put(useTicketSuccess()),
+      call(NavigationService.navigate, "NewTicketSuccess")
+    ]);
   } catch (error) {
     yield put(add(Prefix.USE_TICKET, "Ticket Inválido"));
   }

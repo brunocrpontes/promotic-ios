@@ -2,12 +2,12 @@ import React from "react";
 import {
   View,
   StyleSheet,
-  KeyboardAvoidingView,
   TextInput,
   Alert,
   Animated,
   Easing,
-  ActivityIndicator
+  ActivityIndicator,
+  Keyboard
 } from "react-native";
 import { BarCodeScanner, Permissions } from "expo";
 import { FAB, Text } from "react-native-paper";
@@ -16,7 +16,7 @@ import { createLoadingSelector } from "../reducers/loading";
 import { Prefix as TicketsPrefix } from "../reducers/tickets";
 import { connect } from "react-redux";
 import { useTicket } from "../actions/ticket";
-import NavigationService from "../routes/NavigationService";
+import { withNavigation } from "react-navigation";
 import { createErrorSelector } from "../reducers/error";
 
 const alertTitle = "Falta pouco";
@@ -129,8 +129,8 @@ class TicketForm extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isLoading, ticketError } = this.props;
-    const { animated, code } = this.state;
+    const { isLoading } = this.props;
+    const { animated } = this.state;
 
     if (prevProps.isLoading !== isLoading)
       Animated.timing(animated, {
@@ -139,14 +139,6 @@ class TicketForm extends React.Component {
         useNativeDriver: true,
         easing: Easing.in
       }).start();
-
-    if (
-      prevProps.isLoading !== isLoading &&
-      prevState.code === code &&
-      !isLoading &&
-      !ticketError
-    )
-      NavigationService.navigate("NewTicketSuccess");
   }
 
   componentWillUmount() {
@@ -169,7 +161,7 @@ class TicketForm extends React.Component {
     const { user, useTicket } = this.props;
 
     if (!code) return;
-
+    Keyboard.dismiss();
     useTicket(user.id, code);
   }
 
@@ -268,7 +260,9 @@ const mapDispatchToProps = {
   useTicket
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TicketForm);
+export default withNavigation(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(TicketForm)
+);

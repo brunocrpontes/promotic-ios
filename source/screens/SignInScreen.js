@@ -110,16 +110,16 @@ function SignInScreen(props) {
           {/* <GoogleButton disabled={disabled} style={styles.centeredButton} /> */}
         </View>
       </KeyboardAwareScrollView>
-      {Boolean(facebookError) && (
-        <ErrorNotification
-          message={facebookError}
-          prefixError={UserPrefix.FACEBOOK_LOGIN}
-        />
-      )}
       {Boolean(userError) && (
         <ErrorNotification
           message={userError}
           prefixError={UserPrefix.USER_LOGIN}
+        />
+      )}
+      {Boolean(facebookError) && (
+        <ErrorNotification
+          message={facebookError}
+          prefixError={UserPrefix.FACEBOOK_LOGIN}
         />
       )}
       {Boolean(connectionError) && (

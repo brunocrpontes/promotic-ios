@@ -149,12 +149,15 @@ function* del() {
     }
 
     yield all([
-      call(NavigationService.navigate("SignIn")),
+      call(NavigationService.navigate("Auth")),
       put(UserActions.requestDeleteAccountSuccess())
     ]);
   } catch (error) {
     yield put(
-      ErrorActions.add(Prefix.USER_DELETE, "Erro ao executar a operação")
+      ErrorActions.add(
+        Prefix.USER_DELETE,
+        error.message || "Erro ao executar a operação"
+      )
     );
   }
 }
@@ -162,6 +165,7 @@ function* del() {
 function* facebook() {
   const appID = Constants.manifest.facebookAppId;
   const permissions = ["public_profile", "email"];
+  const behavior = "native";
 
   while (true) {
     //FIXME: rewrite function to just do 1 request to the server confirm the login
@@ -172,7 +176,8 @@ function* facebook() {
         Facebook.logInWithReadPermissionsAsync,
         appID,
         {
-          permissions
+          permissions,
+          behavior
         }
       );
 
@@ -188,6 +193,25 @@ function* facebook() {
         `https://graph.facebook.com/me?access_token=${token}&fields=email,name`
       );
 
+      const requestSignUp = yield call(axios.post, "/cliente", {
+        email,
+        nome: name
+      });
+
+      if (
+        !requestSignUp ||
+        (!requestSignUp.data.ok && typeof requestSignUp.data.error === "string")
+      ) {
+        console.log("REQUEST SIGNUP ERROR");
+        yield put(
+          ErrorActions.add(
+            Prefix.FACEBOOK_LOGIN,
+            requestSignUp.data.error || "Erro ao acessar o aplicativo"
+          )
+        );
+        continue;
+      }
+
       const {
         data: { ok, ...user }
       } = yield call(axios.post, "/cliente/loginsocial", {
@@ -195,39 +219,13 @@ function* facebook() {
       });
 
       if (!ok) {
-        const requestSignUp = yield call(axios.post, "/cliente", {
-          email,
-          nome: name
-        });
-
-        if (!requestSignUp || !requestSignUp.data.ok) {
-          yield put(
-            ErrorActions.add(
-              Prefix.FACEBOOK_LOGIN,
-              "Erro ao acessar o aplicativo"
-            )
-          );
-          continue;
-        }
-
-        const { data } = yield call(axios.post, "/cliente/loginsocial", {
-          email
-        });
-
-        if (!data.ok) {
-          yield put(
-            ErrorActions.add(
-              Prefix.FACEBOOK_LOGIN,
-              "Erro ao acessar o aplicativo"
-            )
-          );
-          continue;
-        }
-
-        yield all([
-          call(NavigationService.navigate, "Promotions", { name: user.nome }),
-          put(UserActions.facebookLoginSuccess(user))
-        ]);
+        console.log("REQUEST LOGIN SOCIAL ERROR");
+        yield put(
+          ErrorActions.add(
+            Prefix.FACEBOOK_LOGIN,
+            "Erro ao acessar o aplicativo"
+          )
+        );
         continue;
       }
 
@@ -237,7 +235,10 @@ function* facebook() {
       ]);
     } catch (error) {
       yield put(
-        ErrorActions.add(Prefix.FACEBOOK_LOGIN, "Erro ao acessar o aplicativo")
+        ErrorActions.add(
+          Prefix.FACEBOOK_LOGIN,
+          error.message || "Erro ao acessar o aplicativo"
+        )
       );
     }
   }

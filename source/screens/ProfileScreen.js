@@ -152,7 +152,9 @@ class ProfileScreen extends React.Component {
         telefone: {
           ...telefone,
           hasError: true,
-          errorMessage: "Insira um telefone válido"
+          errorMessage: !telefone.value
+            ? "Campo Obrigatório"
+            : "Insira um telefone válido"
         }
       });
 
@@ -243,12 +245,7 @@ class ProfileScreen extends React.Component {
     const { addError, requestUpdateUserData } = this.props;
 
     const keys = Object.keys(this.state);
-
-    const nullableKeys = ["cpf", "telefone"];
-
-    const neededKeys = _.difference(keys, nullableKeys);
-
-    const errors = _(neededKeys).reduce((acc, key) => {
+    const errors = _(keys).reduce((acc, key) => {
       const isEmpty = !Boolean(this.state[key].value);
 
       if (isEmpty)
@@ -259,6 +256,8 @@ class ProfileScreen extends React.Component {
             errorMessage: "Campo Obrigatório"
           }
         };
+
+      return acc;
     }, {});
 
     await this.setState(prevState => ({
@@ -268,7 +267,7 @@ class ProfileScreen extends React.Component {
 
     if (_(keys).some(key => _.get(this.state, `${key}.hasError`, false))) {
       addError(
-        UserPrefix.USER_SIGNUP,
+        UserPrefix.USER_UPDATE_DATA,
         "Há um ou mais campos inválidos no formulário"
       );
 

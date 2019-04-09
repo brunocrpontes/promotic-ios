@@ -18,7 +18,7 @@ function NewTicketScreen(props) {
 
   return (
     <KeyboardAvoidingView enabled behavior="padding" style={styles.container}>
-      <TicketForm navigation={navigation} />
+      <TicketForm />
       {Boolean(ticketError) && (
         <ErrorNotification
           message={ticketError}

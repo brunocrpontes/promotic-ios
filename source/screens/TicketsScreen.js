@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ActivityIndicator, FlatList } from "react-native";
 import theme from "../theme";
-import { Button, Text, Card, Divider } from "react-native-paper";
+import { Button, Text, Card, Divider, Title } from "react-native-paper";
 import { Prefix as TicketsPrefix } from "../reducers/tickets";
 import { requestTicketList } from "../actions/ticket";
 import { Prefix as ConnectionPrefix } from "../reducers/connection";
@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     margin: 16
   },
   textEmpty: {
-    textAlign: "center"
+    textAlign: "center",
+    color: "grey"
   }
 });
 

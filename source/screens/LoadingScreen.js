@@ -39,7 +39,7 @@ function LoadingScreen(props) {
 
     user.isAuthenticated && user.id
       ? navigation.navigate("Promotions", { name: user.nome })
-      : navigation.navigate("Auth");
+      : navigation.navigate("SignIn");
   }
 
   function onStartAsync() {
