@@ -7,7 +7,8 @@ import {
   Animated,
   Easing,
   ActivityIndicator,
-  Keyboard
+  Keyboard,
+  SafeAreaView
 } from "react-native";
 import { BarCodeScanner, Permissions } from "expo";
 import { FAB, Text } from "react-native-paper";
@@ -18,6 +19,10 @@ import { connect } from "react-redux";
 import { useTicket } from "../actions/ticket";
 import { withNavigation } from "react-navigation";
 import { createErrorSelector } from "../reducers/error";
+import NavigationService from "../routes/NavigationService";
+
+//animated safe area view
+const SafeAreaViewAnimated = Animated.createAnimatedComponent(SafeAreaView);
 
 const alertTitle = "Falta pouco";
 const alertText =
@@ -76,7 +81,6 @@ const styles = StyleSheet.create({
   loadingContainer: {
     position: "absolute",
     width: "100%",
-    height: 56,
     backgroundColor: theme.colors.primary,
     alignItems: "center",
     justifyContent: "center",
@@ -90,7 +94,7 @@ const styles = StyleSheet.create({
 });
 
 class TicketForm extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {
@@ -99,10 +103,12 @@ class TicketForm extends React.Component {
       animated: new Animated.Value(0)
     };
 
+    this.loadingTranslateY = 80;
     this.onBarCodeScanned = this.onBarCodeScanned.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
     this.onChangeCodeText = this.onChangeCodeText.bind(this);
     this.onScreenFocus = this.onScreenFocus.bind(this);
+    this.onCodeContainerLayout = this.onCodeContainerLayout.bind(this);
   }
 
   async componentDidMount() {
@@ -172,6 +178,12 @@ class TicketForm extends React.Component {
     }
   }
 
+  onCodeContainerLayout(event) {
+    const { nativeEvent: { layout: { height } } } = event;
+
+    this.loadingTranslateY = height;
+  }
+
   render() {
     const { code, canUseCamera, animated } = this.state;
     const { isLoading } = this.props;
@@ -188,7 +200,7 @@ class TicketForm extends React.Component {
 
     const loadingInterpolation = animated.interpolate({
       inputRange: [0, 1],
-      outputRange: [56, 0]
+      outputRange: [this.loadingTranslateY, 0]
     });
 
     const animatedFabStyle = {
@@ -199,6 +211,7 @@ class TicketForm extends React.Component {
     };
 
     const animatedLoadingStyle = {
+      height: this.loadingTranslateY,
       transform: [{ translateY: loadingInterpolation }]
     };
 
@@ -211,13 +224,15 @@ class TicketForm extends React.Component {
               style={StyleSheet.absoluteFill}
             />
           ) : (
-            <View style={[StyleSheet.absoluteFill, styles.withoutPermission]} />
-          )}
+              <View style={[StyleSheet.absoluteFill, styles.withoutPermission]} />
+            )}
           <View style={styles.scannerContainer}>
             <View style={styles.line} />
           </View>
         </View>
-        <View style={styles.textInputContainer}>
+        <SafeAreaView
+          onLayout={this.onCodeContainerLayout}
+          style={styles.textInputContainer}>
           <TextInput
             value={code}
             placeholder="Código"
@@ -235,13 +250,13 @@ class TicketForm extends React.Component {
               onPress={this.onSubmitForm}
             />
           </Animated.View>
-          <Animated.View
+          <SafeAreaViewAnimated
             style={[styles.loadingContainer, animatedLoadingStyle]}
           >
             <Text style={styles.loadingText}>Enviando</Text>
             <ActivityIndicator size="small" color="white" />
-          </Animated.View>
-        </View>
+          </SafeAreaViewAnimated>
+        </SafeAreaView>
       </View>
     );
   }
