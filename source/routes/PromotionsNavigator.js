@@ -1,6 +1,6 @@
 import React from "react";
 import theme from "../theme";
-import { PromotionsScreen } from "../screens";
+import { PromotionsScreen, RegulationScreen } from "../screens";
 import { createStackNavigator } from "react-navigation";
 
 export default createStackNavigator(
@@ -15,6 +15,12 @@ export default createStackNavigator(
           title: `Promotic - Olá, ${firstName || name}`
         };
       }
+    },
+    Regulation: {
+      screen: RegulationScreen,
+      navigationOptions: {
+        title: 'Regulamento'
+      }
     }
   },
   {
@@ -24,6 +30,7 @@ export default createStackNavigator(
       },
       headerTintColor: "white"
     },
-    headerBackTitleVisible: false
+    headerBackTitleVisible: false,
+    mode: 'modal'
   }
 );

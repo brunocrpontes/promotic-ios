@@ -39,6 +39,12 @@ export default function PromotionsScreen(props) {
     navigation.navigate("Tickets");
   }
 
+  function onRegulationPress() {
+    const { navigation } = props;
+
+    navigation.navigate("Regulation");
+  }
+
   return (
     <View style={styles.container}>
       <Image
@@ -70,6 +76,16 @@ export default function PromotionsScreen(props) {
           onPress={onMyTicketsPress}
         >
           <Text>Meus Tickets</Text>
+        </Button>
+        <Button
+          mode="contained"
+          style={styles.button}
+          icon={({ size, color }) => (
+            <MaterialCommunityIcons name="file-document-box" size={size} color={color} />
+          )}
+          onPress={onRegulationPress}
+        >
+          <Text>Regulamento</Text>
         </Button>
       </View>
     </View>

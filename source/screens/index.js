@@ -6,3 +6,4 @@ export { default as ProfileScreen } from "./ProfileScreen";
 export { default as TicketsScreen } from "./TicketsScreen";
 export { default as NewTicketScreen } from "./NewTicketScreen";
 export { default as NewTicketSuccessScreen } from "./NewTicketSuccessScreen";
+export { default as RegulationScreen } from "./RegulationScreen";

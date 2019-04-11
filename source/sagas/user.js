@@ -165,7 +165,7 @@ function* del() {
 function* facebook() {
   const appID = Constants.manifest.facebookAppId;
   const permissions = ["public_profile", "email"];
-  const behavior = "native";
+  const behavior = "web";
 
   while (true) {
     //FIXME: rewrite function to just do 1 request to the server confirm the login
