@@ -32,7 +32,10 @@ export default createBottomTabNavigator(
         backgroundColor: theme.colors.primary
       },
       activeTintColor: "white",
-      inactiveTintColor: "#00000070"
+      inactiveTintColor: "#00000070",
+      style: {
+        backgroundColor: theme.colors.primary
+      }
     }
   }
 );

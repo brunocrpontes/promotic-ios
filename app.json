@@ -4,8 +4,10 @@
     "slug": "promotic",
     "privacy": "public",
     "sdkVersion": "32.0.0",
-    "platforms": ["ios"],
-    "version": "1.0.0",
+    "platforms": [
+      "ios"
+    ],
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -20,10 +22,13 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "com.brunopontes.promotic",
       "supportsTablet": false,
+      "buildNumber": "1.0.2",
       "infoPlist": {
         "NSCameraUsageDescription": "Permitir que o Promotic utilize a câmera para leitura do código e cadastro dos tickets das promoções"
       }
