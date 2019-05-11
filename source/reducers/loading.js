@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 export function createLoadingSelector(actions) {
-  return function(state) {
+  return function (state) {
     return _(actions).some(action => _.get(state, `loading.${action}`, false));
   };
 }
@@ -14,8 +14,6 @@ export default function loading(state = {}, action) {
   if (!matches) return state;
 
   const [, requestName, requestState] = matches;
-
-  console.log(requestName + "_" + requestState);
 
   return {
     ...state,

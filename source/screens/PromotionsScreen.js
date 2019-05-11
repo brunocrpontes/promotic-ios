@@ -1,21 +1,25 @@
 import React from "react";
-import { View, StyleSheet, Image, Dimensions } from "react-native";
+import { View, StyleSheet, Image, Dimensions, ScrollView } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { NavigationEvents } from 'react-navigation'
+import { subscribe } from '../actions/notification'
 import { Button, Text } from "react-native-paper";
-import theme from "../theme";
+import { connect } from "react-redux";
 
 const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+  },
+  imageContainer: {
+    width,
+    height: width,
+    alignSelf: 'center'
   },
   image: {
-    flex: null,
     width,
-    maxHeight: width,
-    alignSelf: "center",
-    top: 0
+    height: width,
   },
   buttons: {
     marginTop: 8
@@ -26,7 +30,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function PromotionsScreen(props) {
+function PromotionsScreen(props) {
+
   function onAddTicketPress() {
     const { navigation } = props;
 
@@ -45,14 +50,32 @@ export default function PromotionsScreen(props) {
     navigation.navigate("Regulation");
   }
 
+  function onLivePress() {
+    const { navigation } = props;
+
+    navigation.navigate("Live");
+  }
+
+  function onScreenDidFocus() {
+    const { subscribe } = props;
+    subscribe()
+  }
+
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.image}
-        resizeMode="cover"
-        source={require("../../assets/images/promocao_banner.png")}
-      />
-      <View style={styles.buttons}>
+    <ScrollView>
+      <NavigationEvents onWillFocus={onScreenDidFocus} />
+      <View style={styles.imageContainer}>
+        <Image
+          width={null}
+          height={null}
+          style={styles.image}
+          resizeMode="cover"
+          source={require("../../assets/images/promocao_banner.png")}
+        />
+      </View>
+      <View
+        style={styles.buttons}
+      >
         <Button
           mode="contained"
           style={styles.button}
@@ -87,7 +110,23 @@ export default function PromotionsScreen(props) {
         >
           <Text>Regulamento</Text>
         </Button>
+        <Button
+          mode="contained"
+          style={styles.button}
+          icon={({ size, color }) => (
+            <MaterialCommunityIcons name="play-circle" size={size} color={color} />
+          )}
+          onPress={onLivePress}
+        >
+          <Text>Live</Text>
+        </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 }
+
+const mapDispatchToProps = {
+  subscribe
+}
+
+export default connect(null, mapDispatchToProps)(PromotionsScreen)

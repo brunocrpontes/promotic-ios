@@ -14,6 +14,8 @@ import Brand from "../../assets/fonts/brand.ttf";
 
 // Images and Assets
 import promotionLogo from "../../assets/images/promocao_banner.png";
+import liveBackground from '../../assets/images/video-background.jpg';
+import offlineLiveBanner from '../../assets/images/promotic-live-offline.png';
 
 function LoadingScreen(props) {
   function loadAssets(images) {
@@ -43,7 +45,7 @@ function LoadingScreen(props) {
   }
 
   function onStartAsync() {
-    return Promise.all([loadFonts(), ...loadAssets([promotionLogo])]);
+    return Promise.all([loadFonts(), ...loadAssets([promotionLogo, liveBackground, offlineLiveBanner])]);
   }
 
   return <AppLoading onFinish={onFinish} startAsync={onStartAsync} />;

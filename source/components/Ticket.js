@@ -1,16 +1,15 @@
 import React from "react";
-import { Card, Title } from "react-native-paper";
+import { Card, Title, Text } from "react-native-paper";
 
-export default class Ticket extends React.PureComponent {
-  render() {
-    const { numero } = this.props;
+export default function Ticket({ numero, nome_fantasia }) {
 
-    return (
-      <Card>
-        <Card.Content>
-          <Title>{numero}</Title>
-        </Card.Content>
-      </Card>
-    );
-  }
+  return (
+    <Card>
+      <Card.Content>
+        <Title>{numero}</Title>
+        <Text>{nome_fantasia}</Text>
+      </Card.Content>
+    </Card>
+  );
 }
+

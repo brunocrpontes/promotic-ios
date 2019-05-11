@@ -1,4 +1,3 @@
-import React from "react";
 import theme from "../theme";
 import { PromotionsScreen, RegulationScreen } from "../screens";
 import { createStackNavigator } from "react-navigation";

@@ -7,3 +7,4 @@ export { default as TicketsScreen } from "./TicketsScreen";
 export { default as NewTicketScreen } from "./NewTicketScreen";
 export { default as NewTicketSuccessScreen } from "./NewTicketSuccessScreen";
 export { default as RegulationScreen } from "./RegulationScreen";
+export { default as LiveStreamScreen } from "./LiveStreamScreen";

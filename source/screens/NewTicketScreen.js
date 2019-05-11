@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 });
 
 function NewTicketScreen(props) {
-  const { connectionError, ticketError, navigation } = props;
+  const { connectionError, ticketError } = props;
 
   return (
     <KeyboardAvoidingView enabled behavior="padding" style={styles.container}>

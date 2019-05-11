@@ -18,6 +18,8 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 const store = createStore(persistedReducer, applyMiddleware(saga));
 const persistor = persistStore(store);
 
+store.subscribe(state => console.warn(state))
+
 saga.run(sagas);
 
 export { store, persistor };

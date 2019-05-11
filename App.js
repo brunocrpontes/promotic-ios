@@ -1,20 +1,20 @@
-// @flow
 import React from "react";
-import { store, persistor } from "./source/store";
+import { Notifications } from 'expo'
 import theme from "./source/theme";
 import Routes from "./source/routes";
 import { Provider } from "react-redux";
-import { StatusBar, AppRegistry, NetInfo } from "react-native";
+import { store, persistor } from "./source/store";
+import { StatusBar, NetInfo } from "react-native";
 import { useScreens } from "react-native-screens";
+import { PersistGate } from "redux-persist/integration/react";
 import { Provider as PaperProvider } from "react-native-paper";
 import NavigationService from "./source/routes/NavigationService";
 import { updateConnectionState } from "./source/actions/connection";
-import { PersistGate } from "redux-persist/integration/react";
 
 useScreens(false);
 
 export default class App extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.onInternetStateChange = this.onInternetStateChange.bind(this, store);
@@ -25,14 +25,20 @@ export default class App extends React.Component {
       "connectionChange",
       this.onInternetStateChange
     );
-  }
 
-  onInternetStateChange({ dispatch }, isConnected) {
-    store.dispatch(updateConnectionState(isConnected));
+    this.notificationListener = Notifications.addListener(this.onNotificationReceived)
   }
 
   componentWillUnmount() {
     NetInfo.removeEventListener("connectionChange");
+  }
+
+  onNotificationReceived = (notification) => {
+    console.log(notification)
+  }
+
+  onInternetStateChange({ dispatch }, isConnected) {
+    dispatch(updateConnectionState(isConnected));
   }
 
   render() {

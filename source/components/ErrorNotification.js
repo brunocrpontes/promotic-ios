@@ -1,7 +1,5 @@
 import React from "react";
-import { Snackbar, Button, Text } from "react-native-paper";
-import { StyleSheet } from "react-native";
-import theme from "../theme";
+import { Snackbar } from "react-native-paper";
 import { remove } from "../actions/error";
 import { Prefix } from "../reducers/connection";
 import { connect } from "react-redux";
@@ -17,9 +15,9 @@ function ErrorNotification({ message, remove, prefixError, ...props }) {
     prefixError === Prefix.CONNECTION_STATE
       ? null
       : {
-          label: "Entendido",
-          onPress: () => remove(prefixError)
-        };
+        label: "Entendido",
+        onPress: () => remove(prefixError)
+      };
 
   return (
     <Snackbar
@@ -27,6 +25,7 @@ function ErrorNotification({ message, remove, prefixError, ...props }) {
       action={action}
       duration={Snackbar.DURATION_MEDIUM}
       onDismiss={onDismiss}
+      {...props}
     >
       {message || ""}
     </Snackbar>

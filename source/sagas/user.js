@@ -202,7 +202,6 @@ function* facebook() {
         !requestSignUp ||
         (!requestSignUp.data.ok && typeof requestSignUp.data.error === "string")
       ) {
-        console.log("REQUEST SIGNUP ERROR");
         yield put(
           ErrorActions.add(
             Prefix.FACEBOOK_LOGIN,
@@ -219,7 +218,6 @@ function* facebook() {
       });
 
       if (!ok) {
-        console.log("REQUEST LOGIN SOCIAL ERROR");
         yield put(
           ErrorActions.add(
             Prefix.FACEBOOK_LOGIN,

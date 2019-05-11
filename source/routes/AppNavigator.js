@@ -1,4 +1,4 @@
-import { TicketsScreen } from "../screens";
+import { TicketsScreen, LiveStreamScreen } from "../screens";
 import { createStackNavigator } from "react-navigation";
 import HomeNavigator from "./HomeNavigator";
 import NewTicketNavigator from "./NewTicketNavigator";
@@ -27,6 +27,12 @@ export default createStackNavigator(
           backgroundColor: theme.colors.primary
         },
         headerTintColor: "white"
+      }
+    },
+    Live: {
+      screen: LiveStreamScreen,
+      navigationOptions: {
+        header: null
       }
     }
   },
