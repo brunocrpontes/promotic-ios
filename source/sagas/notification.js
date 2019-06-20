@@ -83,7 +83,5 @@ function* requestRevoke(expo_token) {
     yield put({ type: Types.NOTIFICATION_REVOKE_SUCCESS })
 
   } catch (error) {
-    const { message } = error.response.data
-    yield put(add(Prefix.revoke, message || error.message))
   }
 }
